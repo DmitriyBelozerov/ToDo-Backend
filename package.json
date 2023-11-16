@@ -1,7 +1,7 @@
 {
-  "name": "movies-explorer-api",
+  "name": "todo-api",
   "version": "1.0.0",
-  "description": "Бэкенд часть диплома Яндекс Практикум",
+  "description": "backend app ToDo",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -42,7 +42,7 @@
     "express-winston": "^4.2.0",
     "helmet": "^6.0.1",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^6.8.2",
+    "mongoose": "6.8.2",
     "validator": "^13.7.0",
     "winston": "^3.8.2"
   }

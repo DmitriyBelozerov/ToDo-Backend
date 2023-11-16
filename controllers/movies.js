@@ -1,17 +1,16 @@
-const Movie = require('../models/movie');
+const ItemTodo = require('../models/movie');
 const NotFoundError = require('../errors/not-found-err');
-const UserAccessError = require('../errors/user-access-err');
 const ValidationError = require('../errors/validation-err');
 const {
-  messageIncorrectDataCreateMovie, messageMovieNotFound, messageAccessСonflict,
+  messageIncorrectDataCreateMovie, messageMovieNotFound,
   messageIncorrectDataDeleteMovie,
 } = require('../constants/constants');
 
 const NO_ERRORS = 200;
 const NO_ERRORS_CREATED = 201;
 
-const getMovies = (req, res, next) => {
-  Movie.find({})
+const getItemsTodo = (req, res, next) => {
+  ItemTodo.find({})
     .populate(['owner'])
     .then((movies) => {
       res.status(NO_ERRORS).send({
@@ -21,27 +20,15 @@ const getMovies = (req, res, next) => {
     .catch(next);
 };
 
-const createMovie = (req, res, next) => {
+const createItemTodo = (req, res, next) => {
   const {
-    country, director, duration, year, description, image,
-    trailerLink, thumbnail, movieId, nameRU, nameEN,
+    name,
   } = req.body;
-  Movie.create({
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailerLink,
-    thumbnail,
-    movieId,
-    nameRU,
-    nameEN,
-    owner: req.user._id,
+  ItemTodo.create({
+    name,
   })
-    .then((movie) => {
-      res.status(NO_ERRORS_CREATED).send({ data: movie });
+    .then((itemTodo) => {
+      res.status(NO_ERRORS_CREATED).send({ data: itemTodo });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -52,17 +39,15 @@ const createMovie = (req, res, next) => {
     });
 };
 
-const deleteMovie = (req, res, next) => {
-  Movie.findById(req.params._id)
-    .then((movie) => {
-      if (!movie) {
+const deleteItemTodo = (req, res, next) => {
+  ItemTodo.findById(req.params._id)
+    .then((item) => {
+      if (!item) {
         throw new NotFoundError(messageMovieNotFound);
-      } else if (!movie.owner.equals(req.user._id)) {
-        throw new UserAccessError(messageAccessСonflict);
       } else {
-        movie.remove()
+        item.remove()
           .then(() => {
-            res.status(NO_ERRORS).send({ data: movie });
+            res.status(NO_ERRORS).send({ data: item });
           })
           .catch((err) => next(err));
       }
@@ -77,5 +62,5 @@ const deleteMovie = (req, res, next) => {
 };
 
 module.exports = {
-  getMovies, createMovie, deleteMovie,
+  getItemsTodo, createItemTodo, deleteItemTodo,
 };
